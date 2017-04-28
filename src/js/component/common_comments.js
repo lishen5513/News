@@ -32,7 +32,7 @@ class CommonComments extends React.Comonent{
        var fetchOptions={
            method:"GET"
        };
-       fetch(""+this.props.uniquekey,fetchOptions).then(resonse.json()).then(json=>{
+       fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getcomments&uniquekey="+this.props.uniquekey,fetchOptions).then(resonse.json()).then(json=>{
           this.setState({comments:json});
        });
     };
@@ -41,12 +41,21 @@ class CommonComments extends React.Comonent{
         var fetchOptions={
             method:"GET"
         };
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=uc&userid="+localstorage.userid+"&uniquekey="+this.props.uniquekey,fetchOptions).then(response=>response.json()).then(json=>{
+        var formdata=this.props.from.getFieldsValue();
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=uc&userid="+localstorage.userid+"&uniquekey="+this.props.uniquekey+"&comment="+formdata.remark,fetchOptions).then(response=>response.json()).then(json=>{
             this.componentDidMount();
         });
     };
+    addUserCollection(){
+    var fetchOptions = {
+        methos: "GET"
+    };
+    fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=uc&userid=" + localStorage.userid + "&uniquekey=" + this.props.uniquekey, myFetchOptions).then(response => response.json()).then(json => {
+         notification["success"]({message:"ReactNews提醒",description:"收藏成功"});
+    });
+};
     render(){
-
+        let {getFieldProps}=this.props.form;
         const comment=this.state.comments;
         const commentList=comments.length?
             comments.map((item,index)=>(
@@ -70,6 +79,6 @@ class CommonComments extends React.Comonent{
               </Row>
             </div>
         );
-    };
+    }
 }
 export default CommonComments =Form.create({})(CommonComments);
